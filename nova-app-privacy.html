@@ -14,13 +14,13 @@
 </head>
 <body><main>
 <h1>Privacybeleid – NOVA Ride</h1>
-<p>Laatst bijgewerkt: 15 oktober 2026 · <a href="#en">English below</a></p>
+<p>Laatst bijgewerkt: 21 oktober 2026 · <a href="#en">English below</a></p>
 <p>Dit beleid gaat over de app <strong>NOVA Ride</strong> voor iOS en Android: spraakcommunicatie tussen motorrijders. De app is in ontwikkeling en wordt getest via TestFlight en testversies voor Android. Niet elke testversie heeft alle functies hieronder; dit beleid beschrijft de nieuwste testversies.</p>
 
 <h2>Kort samengevat</h2>
 <ul>
   <li>Geen account, geen advertenties, geen analyse- of trackingdiensten van derden.</li>
-  <li>Spraak is altijd end-to-end versleuteld. Ze gaat rechtstreeks via Bluetooth of Wi-Fi Aware, of via de NOVA-server die de versleutelde pakketjes alleen doorstuurt en niet kan lezen.</li>
+  <li>Spraak is altijd end-to-end versleuteld. Tijdens een rit gaan spraak en de besturing van de rit (zoals de deelnemerslijst en stemmen) standaard via de NOVA-server, die de versleutelde pakketjes alleen doorstuurt en niet kan lezen. Bluetooth gebruikt de app om rijders te vinden en te verbinden, en als reserve.</li>
   <li>Gesprekken worden nooit opgenomen of opgeslagen, ook niet op de server.</li>
   <li>De server bewaart geen persoonsgegevens: wat hij nodig heeft, staat alleen kort in zijn werkgeheugen. Hij houdt alleen anonieme aantallen bij, zoals hoeveel telefoons NOVA open hebben.</li>
   <li>Snelheid, beweging en locatie worden alleen op je telefoon gebruikt en niet verstuurd.</li>
@@ -30,18 +30,26 @@
 <ul>
   <li>Je rijdersnaam en je instellingen, zoals zichtbaarheid, taal, Proximity chat en het serveradres.</li>
   <li>Een willekeurig aangemaakte digitale sleutel en rijder-ID. Daarmee herkennen andere NOVA-telefoons je, en worden verbindingen beveiligd.</li>
-  <li>Een lijst van rijders die je zelf hebt geblokkeerd.</li>
-  <li>In testversies: een meetbestand met bochtgegevens (snelheid, bochtkracht en kanteling per bocht, zonder locatie) voor de motor/auto-herkenning.</li>
+  <li>Per rit een tijdelijke ritsleutel en groepssleutel. Daarmee worden spraak en besturing van die rit versleuteld. Ze verdwijnen als de rit eindigt.</li>
+  <li>Een lijst van rijders die je zelf hebt geblokkeerd, met de naam die ze op dat moment gebruikten.</li>
+  <li>In testversies: een meetbestand met rijgegevens (zonder locatie) voor de motor/auto-herkenning.</li>
+  <li>In testversies: een technisch logbestand (bijvoorbeeld de status van verbindingen en de namen van verbonden Bluetooth-audioapparaten; geen gesprekken en geen locatie; maximaal 2 MB). Het blijft op je telefoon. De ontwikkelaar kan het alleen uitlezen als je telefoon met een kabel aan zijn computer is gekoppeld, bijvoorbeeld bij een test.</li>
 </ul>
 <p>Dit blijft op je toestel. Verwijder je de app, dan verdwijnen deze gegevens ook.</p>
 
 <h2>Wat rijders in de buurt kunnen zien</h2>
 <p>Zolang <em>Zichtbaar voor andere rijders</em> of <em>Proximity chat</em> aan staat, zendt de app een NOVA-signaal uit via Bluetooth. NOVA-gebruikers in de buurt zien dan je rijdersnaam en je openbare sleutel, zodat ze je kunnen uitnodigen. Een rit via uitnodiging begint pas nadat beide rijders hebben geaccepteerd. Proximity chat zet je zelf aan; dan maakt de app automatisch contact met andere NOVA-rijders die je via Bluetooth in de buurt ziet en die ook rijden. Het Bluetooth-signaal bevat dan alleen een anonieme code (afgeleid van je rijder-ID en een sleutel die bij elke opstart van de app nieuw is) en of je rijdt (ja/nee), niet je naam, snelheid of locatie.</p>
+<p>Bij de eerste keer openen vraagt de app of je zichtbaar wilt zijn. Staat zichtbaarheid aan, dan blijft het NOVA-signaal ook actief als de app op de achtergrond staat. Op een iPhone zien op de achtergrond alleen andere iPhones je.</p>
+<p><strong>Blokkeren.</strong> Heb je iemand geblokkeerd, dan bevat je NOVA-signaal korte, anonieme controlecodes. Die zijn afgeleid van de ID's van de rijders die je blokkeerde, met een willekeurige toevoeging. Zo herkent de telefoon van een geblokkeerde rijder dat hij jou niet moet tonen. Namen of ID's zijn er niet uit af te lezen. Een aangepaste app van de geblokkeerde rijder zou wel kunnen afleiden dat jij hem hebt geblokkeerd.</p>
+
+<h2>Tijdens een rit</h2>
+<p>De rijders in een rit zien elkaars rijdersnaam en of iemand praat. De app verdeelt de rol van host automatisch; vertrekt de host, dan neemt een andere rijder het over. Start iemand een stemming om een rijder uit de rit te zetten, dan zien de anderen wie die stemming startte en over wie het gaat, en daarna de uitslag. Stemmen worden niet bewaard. Dempen en blokkeren gebeuren alleen op je eigen telefoon.</p>
 
 <h2>De NOVA-server</h2>
 <p>Voor Proximity chat en voor spraak via 4G/5G gebruikt de app een NOVA-server. In de testfase is dat een server van de ontwikkelaar in Nederland, bereikbaar via het privé-netwerk Tailscale; later wordt het een server in de Europese Unie. De server:</p>
 <ul>
   <li><strong>Spraak</strong>: stuurt versleutelde spraakpakketjes door naar de andere rijders in hetzelfde gesprek. Hij kan ze niet ontsleutelen en slaat ze niet op.</li>
+  <li><strong>Besturing van een rit</strong>: de deelnemerslijst, stemmen, de overdracht van de host en de groepssleutel stuurt de server per ontvanger versleuteld door. Hij kan ze niet lezen en slaat ze niet op. Hij ziet alleen een ritcode en het rijder-ID van de afzender, zolang de rit loopt.</li>
   <li><strong>Proximity chat</strong>: krijgt van je telefoon die anonieme code, je rijder-ID, je openbare sleutel en je rijdersnaam, om twee rijders die elkaar via Bluetooth zien met elkaar te verbinden. Dit staat alleen in het werkgeheugen en verdwijnt binnen 30 seconden nadat je Proximity uitzet of de app sluit.</li>
   <li><strong>"NOVA staat open"</strong>: zolang de app open is, stuurt hij elke 30 seconden een willekeurig nummer dat bij elke opstart nieuw is (geen naam, ID of locatie). Dit staat alleen in het werkgeheugen en verdwijnt na 75 seconden.</li>
   <li><strong>Technische verbindingsgegevens</strong>: zoals bij elke internetverbinding ziet de server het netwerkadres van je telefoon zolang hij pakketjes doorstuurt. Dat wordt niet opgeslagen.</li>
@@ -52,10 +60,11 @@
 <p>De microfoon wordt alleen gebruikt tijdens een actieve rit en bij de microfoontest. De spraak wordt op je telefoon gecomprimeerd, versleuteld en naar de andere rijders in de rit gestuurd, rechtstreeks of via de NOVA-server. Zij kunnen haar alleen live afspelen. Er wordt niets opgenomen of opgeslagen.</p>
 
 <h2>Locatie, snelheid en beweging</h2>
-<p>De app gebruikt GPS om je snelheid te bepalen. Zo werkt Proximity chat alleen als je rijdt, en kan een groepsrit pauzeren als je stilstaat. In testversies gebruikt de app ook de bewegingssensoren om te herkennen of je op een motor rijdt (een motor helt in de bocht, een auto niet). Je snelheid, locatie en bewegingsgegevens blijven op je telefoon en worden niet naar de server of naar anderen gestuurd. Locatie wordt alleen gebruikt tijdens een rit of als Proximity chat aan staat, ook als de app op de achtergrond staat; iOS en Android tonen dat met een locatiesymbool.</p>
+<p>De app gebruikt GPS om je snelheid te bepalen. Zo werkt Proximity chat alleen als je rijdt, en kan een groepsrit pauzeren als je stilstaat. Daarnaast gebruikt de app de bewegingssensoren om te helpen herkennen of je op een motor rijdt (zie hieronder). Je snelheid, locatie en bewegingsgegevens blijven op je telefoon en worden niet naar de server of naar anderen gestuurd. Locatie wordt alleen gebruikt tijdens een rit, als Proximity chat aan staat, of zolang je telefoon met CarPlay of Android Auto verbonden is, ook als de app op de achtergrond staat. iOS en Android tonen dat met een locatiesymbool.</p>
 
 <h2>Bluetooth-apparaten en auto's</h2>
-<p>NOVA is gemaakt voor motorrijders. Daarom kijkt de app naar de naam van het audioapparaat waarmee je telefoon verbonden is (bijvoorbeeld een helmset of een auto). Herkent de app een auto, dan pauzeert hij. Die naam blijft op je telefoon en wordt niet verstuurd.</p>
+<p>NOVA is gemaakt voor motorrijders. Daarom kijkt de app naar de naam van het audioapparaat waarmee je telefoon verbonden is, bijvoorbeeld een helmset of een auto. Herkent de app een auto, dan start of accepteert hij geen rit en pauzeert hij een lopende rit.</p>
+<p>Ook motorschermen gebruiken CarPlay en Android Auto. Is je telefoon daarmee verbonden, dan controleert de app met de bewegingssensoren of je op een motor rijdt. Twijfelt de app, dan vraagt hij of je op de motor zit, en kunnen gesprekken tijdelijk worden geblokkeerd. De naam van het apparaat, de gegevens van deze controle en je antwoord blijven op je telefoon en worden niet verstuurd.</p>
 
 <h2>Andere toestemmingen</h2>
 <ul>
@@ -63,7 +72,7 @@
   <li><strong>Lokaal netwerk / Wi-Fi Aware</strong>: een directe wifiverbinding tussen twee telefoons, zonder router of internet.</li>
   <li><strong>Camera</strong>: alleen om de QR-code van een rit te scannen. Het beeld wordt niet bewaard.</li>
   <li><strong>Locatie</strong>: zie hierboven (snelheid voor rijherkenning). Op Android 10–12 is deze toestemming ook nodig om Bluetooth-apparaten te zoeken.</li>
-  <li><strong>Meldingen en Live Activity</strong>: laten de status van je rit zien. Dit gebeurt alleen op je eigen toestel.</li>
+  <li><strong>Meldingen en Live Activity</strong>: laten de status van je rit zien, en geven een melding als een rijder je uitnodigt terwijl de app op de achtergrond staat. Dit gebeurt alleen op je eigen toestel.</li>
 </ul>
 
 <h2>TestFlight en Tailscale</h2>
@@ -81,13 +90,13 @@
 <hr>
 
 <h1 id="en">Privacy Policy – NOVA Ride</h1>
-<p>Last updated: 15 October 2026</p>
+<p>Last updated: 21 October 2026</p>
 <p>This policy covers the <strong>NOVA Ride</strong> app for iOS and Android: voice communication between motorcyclists. The app is in development and is tested through TestFlight and Android test builds. Not every test build has all features below; this policy describes the latest test builds.</p>
 
 <h2>In short</h2>
 <ul>
   <li>No account, no ads, no third-party analytics or tracking services.</li>
-  <li>Voice is always end-to-end encrypted. It travels directly over Bluetooth or Wi-Fi Aware, or through the NOVA server, which only forwards the encrypted packets and cannot read them.</li>
+  <li>Voice is always end-to-end encrypted. During a ride, voice and ride control (such as the rider list and votes) go through the NOVA server by default, which only forwards the encrypted packets and cannot read them. The app uses Bluetooth to find and connect riders, and as a fallback.</li>
   <li>Conversations are never recorded or stored, not even on the server.</li>
   <li>The server keeps no personal data: what it needs is held briefly in its working memory only. It only keeps anonymous counts, such as how many phones have NOVA open.</li>
   <li>Speed, motion and location are used on your phone only and are not sent anywhere.</li>
@@ -97,18 +106,26 @@
 <ul>
   <li>Your rider name and your settings, such as visibility, language, Proximity chat and the server address.</li>
   <li>A randomly generated digital key and rider ID. Other NOVA phones use them to recognise you, and they secure connections.</li>
-  <li>A list of riders you have blocked yourself.</li>
-  <li>In test builds: a measurement file with turn data (speed, cornering force and lean per turn, no location) for motorcycle/car detection.</li>
+  <li>For each ride, a temporary ride key and group key that encrypt that ride's voice and control. They are deleted when the ride ends.</li>
+  <li>A list of riders you have blocked yourself, with the name they used at the time.</li>
+  <li>In test builds: a measurement file with riding data (no location) for motorcycle/car detection.</li>
+  <li>In test builds: a technical log file (for example connection status and the names of connected Bluetooth audio devices; no conversations and no location; at most 2 MB). It stays on your phone. The developer can only read it when your phone is connected to his computer with a cable, for example during a test.</li>
 </ul>
 <p>This stays on your device. If you delete the app, this data is deleted as well.</p>
 
 <h2>What nearby riders can see</h2>
 <p>While <em>Visible to other riders</em> or <em>Proximity chat</em> is on, the app broadcasts a NOVA signal over Bluetooth. NOVA users nearby can then see your rider name and your public key, so they can invite you. A ride by invitation only starts after both riders have accepted. You switch Proximity chat on yourself; the app then automatically connects with other NOVA riders it sees nearby over Bluetooth who are also riding. The Bluetooth signal then contains only an anonymous code (derived from your rider ID and a key that is new each time the app starts) and whether you are riding (yes/no), not your name, speed or location.</p>
+<p>The first time you open the app, it asks whether you want to be visible. With visibility on, the NOVA signal stays active while the app is in the background. On an iPhone in the background, only other iPhones can see you.</p>
+<p><strong>Blocking.</strong> If you have blocked someone, your NOVA signal contains short, anonymous check codes, derived from the IDs of the riders you blocked plus a random value. This lets a blocked rider's phone recognise that it should not show you. No names or IDs can be read from them. A modified app on the blocked rider's phone could, however, infer that you have blocked them.</p>
+
+<h2>During a ride</h2>
+<p>Riders in a ride see each other's rider names and whether someone is talking. The app assigns the host role automatically; if the host leaves, another rider takes over. If someone starts a vote to remove a rider, the others see who started the vote and who it is about, and then the result. Votes are not stored. Muting and blocking happen on your own phone only.</p>
 
 <h2>The NOVA server</h2>
 <p>For Proximity chat and for voice over 4G/5G, the app uses a NOVA server. During testing this is a server run by the developer in the Netherlands, reachable through the private network Tailscale; later it will be a server in the European Union. The server:</p>
 <ul>
   <li><strong>Voice</strong>: forwards encrypted voice packets to the other riders in the same conversation. It cannot decrypt them and does not store them.</li>
+  <li><strong>Ride control</strong>: the server forwards the rider list, votes, host handover and the group key, encrypted per recipient. It cannot read them and does not store them. It only sees a ride code and the sender's rider ID while the ride lasts.</li>
   <li><strong>Proximity chat</strong>: receives that anonymous code, your rider ID, your public key and your rider name from your phone, to connect two riders who see each other over Bluetooth. This is held in working memory only and disappears within 30 seconds after you switch Proximity off or close the app.</li>
   <li><strong>"NOVA is open"</strong>: while the app is open, it sends a random number every 30 seconds that is new each time the app starts (no name, ID or location). This is held in working memory only and disappears after 75 seconds.</li>
   <li><strong>Technical connection data</strong>: as with any internet connection, the server sees your phone's network address while it forwards packets. This is not stored.</li>
@@ -119,10 +136,11 @@
 <p>The microphone is used only during an active ride and for the microphone test. Your voice is compressed and encrypted on your phone and sent to the other riders in the ride, directly or through the NOVA server. They can only play it live. Nothing is recorded or stored.</p>
 
 <h2>Location, speed and motion</h2>
-<p>The app uses GPS to determine your speed, so that Proximity chat only works while you are riding and a group ride can pause when you stop. In test builds the app also uses the motion sensors to recognise whether you are riding a motorcycle (a motorcycle leans into a turn, a car does not). Your speed, location and motion data stay on your phone and are not sent to the server or to anyone else. Location is only used during a ride or while Proximity chat is on, including when the app is in the background; iOS and Android show this with a location icon.</p>
+<p>The app uses GPS to determine your speed, so that Proximity chat only works while you are riding and a group ride can pause when you stop. The app also uses the motion sensors to help recognise whether you are riding a motorcycle (see below). Your speed, location and motion data stay on your phone and are not sent to the server or to anyone else. Location is only used during a ride, while Proximity chat is on, or while your phone is connected to CarPlay or Android Auto, including when the app is in the background. iOS and Android show this with a location icon.</p>
 
 <h2>Bluetooth devices and cars</h2>
-<p>NOVA is made for motorcyclists. The app therefore looks at the name of the audio device your phone is connected to (for example a helmet headset or a car). If it recognises a car, it pauses. That name stays on your phone and is not sent anywhere.</p>
+<p>NOVA is made for motorcyclists. The app therefore looks at the name of the audio device your phone is connected to, for example a helmet headset or a car. If it recognises a car, it will not start or accept a ride, and it pauses a ride in progress.</p>
+<p>Motorcycle screens also use CarPlay and Android Auto. When your phone is connected to one of them, the app uses the motion sensors to check whether you are riding a motorcycle. If the app is unsure, it asks whether you are on a motorcycle, and conversations may be temporarily blocked. The device name, the data from this check and your answer stay on your phone and are not sent anywhere.</p>
 
 <h2>Other permissions</h2>
 <ul>
@@ -130,7 +148,7 @@
   <li><strong>Local network / Wi-Fi Aware</strong>: a direct Wi-Fi connection between two phones, without a router or internet.</li>
   <li><strong>Camera</strong>: only to scan a ride's QR code. The image is not stored.</li>
   <li><strong>Location</strong>: see above (speed for ride detection). On Android 10–12 this permission is also required to search for Bluetooth devices.</li>
-  <li><strong>Notifications and Live Activity</strong>: show the status of your ride. This happens only on your own device.</li>
+  <li><strong>Notifications and Live Activity</strong>: show the status of your ride, and notify you when a rider invites you while the app is in the background. This happens only on your own device.</li>
 </ul>
 
 <h2>TestFlight and Tailscale</h2>
