@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="nl" data-taal="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOVA – Ride • Talk • Together</title>
+<meta name="description" content="NOVA: praat met je groep tijdens het rijden. Motor-intercom-app voor iPhone en Android, van Connected by NOVA.">
+<meta property="og:title" content="NOVA – Ride • Talk • Together">
+<meta property="og:description" content="Praat met je groep tijdens het rijden. Motor-intercom-app voor iPhone en Android.">
+<meta property="og:image" content="https://connectedbynova.nl/logo-rond.png">
+<meta property="og:url" content="https://connectedbynova.nl/">
+<meta name="theme-color" content="#05081a">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="nova-icoon-256.png">
+<style>
+  :root {
+    --bg: #05081a; --bg2: #0b1020; --card: #10162b; --line: #232c4a;
+    --fg: #ffffff; --muted: #c9cfe0; --dim: #8a93b0;
+    --accent: #ff8a1f; --accent2: #ffb347;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { overflow-x: hidden; margin: 0; background: var(--bg); color: var(--fg);
+         font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  html[data-taal="nl"] [lang="en"], html[data-taal="en"] [lang="nl"] { display: none !important; }
+
+  header.top { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: flex-end; padding: 16px; z-index: 2; }
+  .taal { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .taal button { background: transparent; color: var(--dim); border: 0; padding: 6px 14px; font: inherit; font-size: 14px; cursor: pointer; }
+  .taal button[aria-pressed="true"] { background: var(--accent); color: #111; font-weight: 600; }
+
+  .hero { min-height: min(92vh, 860px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+          padding: 72px 16px 48px;
+          background: radial-gradient(ellipse 70% 50% at 50% 45%, rgba(255,138,31,.16), transparent 70%),
+                      linear-gradient(180deg, #071033 0%, var(--bg) 70%); }
+  .vleugels { width: min(640px, 92vw); height: auto; mix-blend-mode: screen; margin-bottom: -8px;
+               -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 55%, #000 55%, transparent 100%);
+                       mask-image: radial-gradient(ellipse 50% 50% at 50% 55%, #000 55%, transparent 100%); }
+  .merk { font-weight: 200; font-size: clamp(56px, 13vw, 120px); letter-spacing: .35em; margin: 0 0 0 .35em; line-height: 1; }
+  .slogan { font-weight: 900; font-size: clamp(20px, 5vw, 36px); letter-spacing: .04em; margin: 22px 0 10px; }
+  .intro { color: var(--muted); max-width: 560px; margin: 0 auto 28px; font-size: clamp(17px, 2.4vw, 20px); }
+  .status { display: inline-flex; align-items: center; gap: 14px; color: var(--dim); letter-spacing: .25em; font-size: 13px; text-transform: uppercase; margin-bottom: 28px; }
+  .status::before, .status::after { content: ""; width: 48px; height: 1px; background: var(--accent); }
+
+  .knoppen { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .knop { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 16px; }
+  .knop.hoofd { background: linear-gradient(135deg, var(--accent), #ff6a00); color: #111; box-shadow: 0 8px 30px rgba(255,138,31,.35); }
+  .knop.tweede { border: 1px solid var(--line); color: var(--fg); background: rgba(255,255,255,.03); }
+  .knop:hover { filter: brightness(1.08); }
+  .knop svg { width: 20px; height: 20px; flex: none; }
+
+  section { padding: 72px 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  h2 { font-size: clamp(26px, 4vw, 36px); margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 36px; max-width: 640px; }
+  .raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .kaart { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .kaart h3 { margin: 12px 0 6px; font-size: 19px; }
+  .kaart p { margin: 0; color: var(--muted); font-size: 16px; }
+  .icoon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(255,138,31,.12); color: var(--accent); }
+  .icoon svg { width: 24px; height: 24px; }
+
+  .privacy { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .lijst { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 28px; }
+  .lijst li { display: flex; gap: 12px; color: var(--muted); }
+  .lijst li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+
+  .veilig { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; background: linear-gradient(135deg, rgba(255,138,31,.12), rgba(255,138,31,.02)); border: 1px solid rgba(255,138,31,.35); border-radius: 18px; padding: 24px; }
+  .veilig .icoon { width: 56px; height: 56px; }
+  .veilig h3 { margin: 0 0 4px; }
+  .veilig p { margin: 0; color: var(--muted); }
+
+  .slot { text-align: center; }
+  .slot img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 18px; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 16px 40px; color: var(--dim); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+
+  /* ---- interactieve demo ---- */
+  .demo-wrap { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 40px; align-items: center; }
+  .demo-uitleg ol { padding-left: 20px; color: var(--muted); margin: 0 0 18px; }
+  .demo-uitleg li { margin-bottom: 8px; }
+  .demo-uitleg .let { color: var(--dim); font-size: 14px; }
+  .toestel { width: 300px; height: 620px; border-radius: 44px; padding: 10px; background: #1a1f33;
+             box-shadow: 0 0 0 2px #2b3352, 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(255,138,31,.10); }
+  .scherm { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden;
+            background: radial-gradient(ellipse 90% 40% at 100% 0%, rgba(40,80,160,.35), transparent 60%),
+                        radial-gradient(ellipse 80% 40% at 0% 100%, rgba(255,138,31,.10), transparent 60%), #05070f;
+            font-size: 13px; color: #fff; user-select: none; -webkit-user-select: none; }
+  .scherm * { box-sizing: border-box; }
+  .sch { position: absolute; inset: 0; padding: 30px 16px 16px; display: flex; flex-direction: column; animation: sch-in .25s ease; }
+  @keyframes sch-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .d-vleugels { width: 70%; margin: 4px auto 0; display: block; mix-blend-mode: screen;
+                -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 55%, #000 55%, transparent 100%);
+                        mask-image: radial-gradient(ellipse 50% 50% at 50% 55%, #000 55%, transparent 100%); }
+  .d-merk { text-align: center; font-weight: 200; font-size: 30px; letter-spacing: .3em; margin: -6px 0 10px .3em; }
+  .d-avatar { width: 54px; height: 54px; border-radius: 50%; border: 1.5px solid #ffc400; margin: 0 auto 4px; display: grid; place-items: center; text-align: center; line-height: 1.1; }
+  .d-avatar b { color: #ffc400; font-size: 15px; display: block; } .d-avatar small { font-size: 9px; color: #ddd; }
+  .d-ctrl { text-align: center; color: #ffa000; font-size: 9px; letter-spacing: .12em; margin: 4px 0 12px; }
+  .d-knop { width: 100%; border: 0; border-radius: 22px; padding: 14px; font: inherit; font-weight: 800; letter-spacing: .06em; font-size: 14px; cursor: pointer; margin-bottom: 9px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .d-start { background: linear-gradient(90deg, #ffd000, #ff9800); color: #111; }
+  .d-start.wenk { animation: wenk 1.6s ease-in-out infinite; }
+  @keyframes wenk { 50% { box-shadow: 0 0 0 6px rgba(255,200,0,.25); } }
+  .d-rand { background: rgba(255,255,255,.03); border: 1.5px solid #b06a00; color: #ffa000; }
+  .d-rij { display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #b06a00; border-radius: 22px; padding: 12px 14px; color: #ffa000; font-weight: 800; margin-bottom: 9px; }
+  .d-tel { background: #3a2a10; border-radius: 50%; width: 24px; height: 24px; display: grid; place-items: center; font-size: 12px; }
+  .d-prox { display: flex; align-items: center; justify-content: space-between; background: #16181f; border: 1px solid #2a2e3a; border-radius: 16px; padding: 12px 14px; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .d-schak { width: 46px; height: 28px; border-radius: 14px; background: #3a3d45; position: relative; transition: background .2s; flex: none; }
+  .d-schak::after { content: ""; position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: #9aa0aa; transition: all .2s; }
+  .d-schak.aan { background: #ff9800; } .d-schak.aan::after { left: 22px; background: #fff; }
+  .d-voet { text-align: center; color: #555b6b; font-size: 9px; letter-spacing: .25em; margin-top: auto; }
+  .d-melding { font-size: 11px; color: #ffa000; text-align: center; margin-top: 8px; min-height: 16px; }
+
+  .d-kop { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .d-kop img { width: 64px; mix-blend-mode: screen; }
+  .d-kop .t { font-size: 11px; letter-spacing: .25em; color: #bbb; line-height: 1.5; }
+  .d-kop .t i { font-style: normal; color: #ffa000; font-size: 9px; }
+  .d-status { font-size: 11px; color: #ffa000; margin-left: auto; text-align: right; max-width: 110px; }
+  .d-route { font-size: 9px; letter-spacing: .12em; color: #8a90a0; margin: 2px 0 8px; }
+  .d-raster { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .d-tegel { position: relative; background: #141a26; border: 1px solid #2a3142; border-radius: 16px; padding: 10px 6px 8px; text-align: center; cursor: pointer; min-height: 96px; transition: border-color .2s; }
+  .d-tegel.ik { border-color: #b08a2a; cursor: default; }
+  .d-tegel.praat { border-color: #ff9800; box-shadow: 0 0 14px rgba(255,152,0,.25); }
+  .d-tegel .ini { width: 34px; height: 34px; border-radius: 50%; background: #26314a; color: #ffa000; display: grid; place-items: center; margin: 0 auto 4px; font-weight: 700; font-size: 12px; }
+  .d-tegel .nm { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d-tegel .ster { position: absolute; top: 6px; right: 8px; color: #ffc400; }
+  .d-tegel .stil { position: absolute; top: 6px; left: 8px; font-size: 11px; }
+  .golf { display: flex; gap: 2px; justify-content: center; align-items: center; height: 14px; margin-top: 4px; }
+  .golf i { width: 3px; height: 3px; background: #ff9800; border-radius: 2px; transition: height .12s; }
+  .d-tegel.leeg { border-style: dashed; color: #8a90a0; display: grid; place-items: center; cursor: default; }
+  .d-mic { display: flex; align-items: center; gap: 10px; background: #141820; border: 1px solid #2a2e3a; border-radius: 16px; padding: 10px; margin-top: 10px; cursor: pointer; }
+  .d-mic .rond { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #ff9800; display: grid; place-items: center; color: #ff9800; flex: none; }
+  .d-mic.uit .rond { border-color: #666; color: #888; }
+  .d-mic b { display: block; font-size: 12px; letter-spacing: .08em; } .d-mic small { color: #9aa0aa; font-size: 10px; }
+  .d-eind { margin-top: auto; position: relative; overflow: hidden; border: 1.5px solid #6a1a1a; background: #2a0e0e; color: #ff6b6b; border-radius: 16px; padding: 13px; text-align: center; font-weight: 800; letter-spacing: .12em; cursor: pointer; }
+  .d-eind .vul { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255,80,80,.25); }
+  .d-eind span { position: relative; }
+  .d-sub { text-align: center; color: #8a90a0; font-size: 10px; margin-top: 4px; }
+
+  .d-blad { position: absolute; left: 0; right: 0; bottom: 0; background: #11151f; border-top: 1px solid #2a3142; border-radius: 22px 22px 0 0; padding: 16px; animation: blad-in .2s ease; z-index: 3; }
+  @keyframes blad-in { from { transform: translateY(100%); } to { transform: none; } }
+  .d-blad h4 { margin: 0 0 10px; text-align: center; font-size: 15px; }
+  .d-groot { width: 100%; border: 0; border-radius: 16px; padding: 14px; margin-bottom: 8px; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .d-groot.o { background: #ff9800; color: #111; } .d-groot.g { background: #232938; color: #fff; } .d-groot.r { background: #4a1414; color: #ff8a8a; }
+  .d-groot:disabled { opacity: .5; cursor: default; }
+
+  .d-toast { position: absolute; left: 12px; right: 12px; top: 34px; background: #1d2433; border: 1px solid #ff9800; border-radius: 14px; padding: 10px 12px; font-size: 12px; z-index: 4; animation: sch-in .25s ease; }
+  .d-prx-rijder { text-align: center; margin: 18px 0 10px; }
+  .d-prx-rijder .ini { width: 72px; height: 72px; font-size: 22px; border-radius: 50%; background: #26314a; color: #ffa000; display: grid; place-items: center; margin: 0 auto 8px; font-weight: 700; }
+  .d-prx-rijder .golf { height: 24px; } .d-prx-rijder .golf i { width: 4px; }
+  .demo-opnieuw { margin-top: 10px; background: none; border: 1px solid var(--line); color: var(--dim); border-radius: 10px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  @media (max-width: 760px) { .demo-wrap { grid-template-columns: 1fr; justify-items: center; } }
+  @media (max-width: 340px) { .toestel { transform: scale(.9); transform-origin: top center; margin-bottom: -60px; } }
+
+  @media (max-width: 520px) {
+    .veilig { grid-template-columns: 1fr; }
+    .knop { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="taal" role="group" aria-label="Taal / Language">
+    <button type="button" data-kies="nl" aria-pressed="true">NL</button>
+    <button type="button" data-kies="en" aria-pressed="false">EN</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <img class="vleugels" src="vleugels.png" alt="" width="900" height="337">
+    <h1 class="merk">NOVA</h1>
+    <p class="slogan">RIDE • TALK • TOGETHER</p>
+    <p class="intro">
+      <span lang="nl">Praat met je groep tijdens het rijden, via je eigen helmset. Op iPhone en Android, gewoon door elkaar.</span>
+      <span lang="en">Talk to your group while you ride, through your own helmet headset. On iPhone and Android, mixed together.</span>
+    </p>
+    <p class="status"><span lang="nl">In ontwikkeling</span><span lang="en">In development</span></p>
+    <div class="knoppen">
+      <a class="knop hoofd" href="https://ig.me/m/connected.by.nova" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>
+        <span lang="nl">Stuur ons een bericht</span><span lang="en">Send us a message</span>
+      </a>
+      <a class="knop tweede" href="https://www.instagram.com/connected.by.nova/" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        <span lang="nl">Volg @connected.by.nova</span><span lang="en">Follow @connected.by.nova</span>
+      </a>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2><span lang="nl">Wat NOVA doet</span><span lang="en">What NOVA does</span></h2>
+      <p class="sub">
+        <span lang="nl">NOVA is een intercom-app voor motorrijders. Geen extra kastje op je helm: je telefoon en je headset doen het werk.</span>
+        <span lang="en">NOVA is an intercom app for motorcyclists. No extra box on your helmet: your phone and your headset do the work.</span>
+      </p>
+      <div class="raster">
+        <div class="kaart">
+          <div class="icoon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 4.8"/></svg></div>
+          <h3><span lang="nl">Samen rijden</span><span lang="en">Ride together</span></h3>
+          <p><span lang="nl">Start een rit en nodig je maten uit. Voor nu praten tot 8 rijders met elkaar; grotere groepen komen eraan.</span><span lang="en">Start a ride and invite your mates. For now up to 8 riders talk to each other; bigger groups are on the way.</span></p>
+        </div>
+        <div class="kaart">
+          <div class="icoon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8"/></svg></div>
+          <h3>Proximity chat</h3>
+          <p><span lang="nl">Kom je onderweg een andere NOVA-rijder tegen en hebben jullie het allebei aan? Dan kun je even met elkaar praten. Zelf aan en uit te zetten.</span><span lang="en">Meet another NOVA rider on the road and you both have it on? Then you can talk for a bit. You switch it on and off yourself.</span></p>
+        </div>
+        <div class="kaart">
+          <div class="icoon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></div>
+          <h3><span lang="nl">Rijmaatjes</span><span lang="en">Riding buddies</span></h3>
+          <p><span lang="nl">Klikte het onderweg? Word rijmaatjes, alleen als jullie allebei ja zeggen. Je socials deel je alleen met je maatjes.</span><span lang="en">Clicked on the road? Become riding buddies, only if you both say yes. Your socials are shared only with your buddies.</span></p>
+        </div>
+        <div class="kaart">
+          <div class="icoon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10-5 4V3l5 4L7 17"/></svg></div>
+          <h3><span lang="nl">Bluetooth én 4G/5G</span><span lang="en">Bluetooth and 4G/5G</span></h3>
+          <p><span lang="nl">Werkt met de helmset die je al hebt. Het gesprek loopt via onze eigen server in Europa, met Bluetooth als reserve.</span><span lang="en">Works with the headset you already have. The conversation runs through our own server in Europe, with Bluetooth as a backup.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="demo" style="padding-top:24px">
+    <div class="wrap demo-wrap">
+      <div class="demo-uitleg">
+        <h2><span lang="nl">Probeer het zelf</span><span lang="en">Try it yourself</span></h2>
+        <p class="sub"><span lang="nl">Een nagemaakte NOVA-app om even rond te tikken.</span><span lang="en">A recreated NOVA app to tap around in.</span></p>
+        <ol>
+          <li><span lang="nl">Tik op <b>START A RIDE</b>: je maten komen erbij en je ziet wie er praat.</span><span lang="en">Tap <b>START A RIDE</b>: your mates join and you see who is talking.</span></li>
+          <li><span lang="nl">Tik op een rijder om te <b>dempen</b> of <b>rijmaatjes</b> te worden.</span><span lang="en">Tap a rider to <b>mute</b> them or become <b>riding buddies</b>.</span></li>
+          <li><span lang="nl">Houd <b>END RIDE</b> vast om te stoppen.</span><span lang="en">Hold <b>END RIDE</b> to stop.</span></li>
+          <li><span lang="nl">Zet <b>Proximity chat</b> aan en rij een stukje: wie kom je tegen?</span><span lang="en">Switch on <b>Proximity chat</b> and ride for a bit: who will you meet?</span></li>
+        </ol>
+        <p class="let"><span lang="nl">Dit is een demo: er wordt niets verstuurd en je microfoon wordt niet gebruikt. Namen zijn verzonnen.</span><span lang="en">This is a demo: nothing is sent and your microphone is not used. Names are made up.</span></p>
+        <button type="button" class="demo-opnieuw" id="demo-opnieuw"><span lang="nl">↺ Demo opnieuw</span><span lang="en">↺ Restart demo</span></button>
+      </div>
+      <div class="toestel" aria-label="NOVA demo"><div class="scherm" id="demo-scherm"></div></div>
+    </div>
+  </section>
+
+  <section class="privacy">
+    <div class="wrap">
+      <h2><span lang="nl">Jouw gesprek is van jou</span><span lang="en">Your conversation is yours</span></h2>
+      <p class="sub"><span lang="nl">We hebben NOVA zo gebouwd dat we zo min mogelijk van je weten.</span><span lang="en">We built NOVA so that we know as little about you as possible.</span></p>
+      <ul class="lijst">
+        <li><span lang="nl">Versleuteld van telefoon tot telefoon: wij kunnen niet meeluisteren</span><span lang="en">Encrypted from phone to phone: we cannot listen in</span></li>
+        <li><span lang="nl">Gesprekken worden nooit opgenomen of opgeslagen</span><span lang="en">Conversations are never recorded or stored</span></li>
+        <li><span lang="nl">Geen account nodig, geen advertenties, geen tracking</span><span lang="en">No account needed, no ads, no tracking</span></li>
+        <li><span lang="nl">Je locatie en snelheid blijven op je telefoon</span><span lang="en">Your location and speed stay on your phone</span></li>
+        <li><span lang="nl">Dempen, blokkeren en wegstemmen als iemand vervelend doet</span><span lang="en">Mute, block and vote out anyone who misbehaves</span></li>
+        <li><span lang="nl">Servers in de Europese Unie</span><span lang="en">Servers in the European Union</span></li>
+      </ul>
+      <p style="margin:28px 0 0"><a href="nova-app-privacy.html" id="privacylink"><span lang="nl">Lees de privacyverklaring →</span><span lang="en">Read the privacy policy →</span></a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="veilig">
+        <div class="icoon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div>
+          <h3><span lang="nl">Veilig rijden gaat altijd voor</span><span lang="en">Safe riding always comes first</span></h3>
+          <p><span lang="nl">Gebruik NOVA handsfree en stel alles in voordat je wegrijdt. NOVA is gemaakt voor motorrijders van 18 jaar en ouder.</span><span lang="en">Use NOVA hands-free and set everything up before you ride off. NOVA is made for motorcyclists aged 18 and over.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slot">
+    <div class="wrap">
+      <img src="logo-rond.png" alt="NOVA-logo" width="120" height="120">
+      <h2><span lang="nl">Binnenkort in de App Store en Google Play</span><span lang="en">Coming soon to the App Store and Google Play</span></h2>
+      <p class="sub" style="margin-left:auto;margin-right:auto"><span lang="nl">NOVA zit nu in de testfase. Wil je meetesten of op de hoogte blijven? Stuur ons een bericht.</span><span lang="en">NOVA is in testing right now. Want to help test or stay up to date? Send us a message.</span></p>
+      <div class="knoppen">
+        <a class="knop hoofd" href="https://ig.me/m/connected.by.nova" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>
+          <span lang="nl">Bericht via Instagram</span><span lang="en">Message us on Instagram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Connected by NOVA</span>
+    <nav>
+      <a href="nova-app-privacy.html" id="privacylink2"><span lang="nl">Privacy</span><span lang="en">Privacy</span></a>
+      <a href="https://www.instagram.com/connected.by.nova/" rel="noopener">Instagram</a>
+      <a href="mailto:novaalfatest@gmail.com">novaalfatest@gmail.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var html = document.documentElement;
+    function zet(taal) {
+      html.setAttribute("data-taal", taal);
+      html.setAttribute("lang", taal);
+      document.querySelectorAll("[data-kies]").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-kies") === taal));
+      });
+      ["privacylink", "privacylink2"].forEach(function (id) {
+        var a = document.getElementById(id);
+        if (a) a.setAttribute("href", taal === "en" ? "nova-app-privacy.html#en" : "nova-app-privacy.html");
+      });
+      try { localStorage.setItem("nova-taal", taal); } catch (e) {}
+    }
+    var bewaard = null;
+    try { bewaard = localStorage.getItem("nova-taal"); } catch (e) {}
+    zet(bewaard || ((navigator.language || "nl").toLowerCase().indexOf("nl") === 0 ? "nl" : "en"));
+    document.querySelectorAll("[data-kies]").forEach(function (b) {
+      b.addEventListener("click", function () { zet(b.getAttribute("data-kies")); });
+    });
+  })();
+</script>
+<script>
+(function () {
+  var scherm = document.getElementById("demo-scherm");
+  if (!scherm) return;
+  var T = {
+    nl: { you: "JIJ", youName: "jij", start: "START A RIDE", join: "JOIN A RIDE", nearby: "Rijders in de buurt", prox: "Proximity chat",
+          joinHint: "In de demo start je zelf een rit ↑", room: "RIDE ROOM", waiting: "Wachten op rijders", open: "Rit staat open",
+          route: "VIA SERVER · BLUETOOTH ALS RESERVE", invite: "+ Uitnodigen", micOn: "MIC AAN", micOff: "MIC UIT", micSub: "Luistert naar je stem", micSubOff: "Niemand hoort je",
+          end: "END RIDE", hold: "Houd vast om te stoppen", mute: "Dempen", unmute: "Dempen opheffen", buddy: "Rijmaatje worden", buddyAsk: "Verzoek verstuurd…",
+          buddyYes: " zei ja! Jullie zijn nu rijmaatjes ★", isBuddy: "Rijmaatjes ★", back: "Terug", joined: " doet mee", muted: " gedempt",
+          searching: "Rijdt · zoekt NOVA-rijders…", met: " rijdt in de buurt — jullie zijn verbonden", disconnect: "Verbreek", block: "Blokkeer",
+          blocked: " geblokkeerd — jullie zien elkaar niet meer", gone: "Verbroken — 10 min rust met deze rijder", proxOff: "Zet Proximity aan om rijders te ontmoeten",
+          ended: "Rit beëindigd", talking: "praat", quiet: "stil" },
+    en: { you: "YOU", youName: "you", start: "START A RIDE", join: "JOIN A RIDE", nearby: "Riders nearby", prox: "Proximity chat",
+          joinHint: "In the demo you start a ride yourself ↑", room: "RIDE ROOM", waiting: "Waiting for riders", open: "Ride is open",
+          route: "VIA SERVER · BLUETOOTH AS BACKUP", invite: "+ Invite", micOn: "MIC ON", micOff: "MIC OFF", micSub: "Listening for your voice", micSubOff: "Nobody hears you",
+          end: "END RIDE", hold: "Hold to end", mute: "Mute", unmute: "Unmute", buddy: "Become riding buddies", buddyAsk: "Request sent…",
+          buddyYes: " said yes! You are now riding buddies ★", isBuddy: "Riding buddies ★", back: "Back", joined: " joined", muted: " muted",
+          searching: "Riding · looking for NOVA riders…", met: " is riding nearby — you are connected", disconnect: "Disconnect", block: "Block",
+          blocked: " blocked — you will no longer see each other", gone: "Disconnected — 10 min rest with this rider", proxOff: "Switch on Proximity to meet riders",
+          ended: "Ride ended", talking: "talking", quiet: "quiet" }
+  };
+  var NAMEN = ["Sanne", "Joost", "Mehmet"], VREEMDE = "Kim";
+  var st, timers = [];
+  function taal() { return document.documentElement.getAttribute("data-taal") === "en" ? "en" : "nl"; }
+  function t(k) { return T[taal()][k]; }
+  function later(f, ms) { timers.push(setTimeout(f, ms)); }
+  function stopAlles() { timers.forEach(clearTimeout); timers = []; }
+  function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function golf(n) { var h = ""; for (var i = 0; i < (n || 7); i++) h += "<i></i>"; return '<div class="golf">' + h + "</div>"; }
+  function ini(n) { return esc(n.slice(0, 2).toUpperCase()); }
+  function reset() { stopAlles(); st = { s: "home", prox: false, riders: [], mic: true, blad: null, toast: "", code: "BBF6XT", wenk: true }; teken(); }
+  function toast(m, ms) { st.toast = m; teken(); later(function () { if (st.toast === m) { st.toast = ""; teken(); } }, ms || 2600); }
+
+  function teken() {
+    var h = "";
+    if (st.s === "home") {
+      h += '<div class="sch"><img class="d-vleugels" src="vleugels.png" alt=""><div class="d-merk">NOVA</div>' +
+        '<div class="d-avatar"><div><b>' + t("you").charAt(0) + '</b><small>' + t("youName") + '</small></div></div><div class="d-ctrl">≋ NOVA CONTROL</div>' +
+        '<button class="d-knop d-start' + (st.wenk ? " wenk" : "") + '" data-a="start">((•)) ' + t("start") + '</button>' +
+        '<button class="d-knop d-rand" data-a="join">▣ ' + t("join") + '</button>' +
+        '<div class="d-rij"><span>👥</span><span>' + t("nearby") + '</span><span class="d-tel">' + (st.prox ? 2 : 1) + '</span></div>' +
+        '<div class="d-prox" data-a="prox"><span>' + t("prox") + '</span><span class="d-schak' + (st.prox ? " aan" : "") + '"></span></div>' +
+        '<div class="d-melding">' + (st.prox ? esc(t("searching")) : "") + '</div>' +
+        '<div class="d-voet">RIDE • TALK • TOGETHER</div></div>';
+    } else if (st.s === "rit") {
+      var tegels = '<div class="d-tegel ik' + (st.mic && st.ikPraat ? " praat" : "") + '"><div class="ini">' + t("you").slice(0, 2) + '</div><div class="nm">' + esc(t("youName")) + '</div>' + golf() + "</div>";
+      st.riders.forEach(function (r, i) {
+        tegels += '<div class="d-tegel' + (r.praat && !r.stil ? " praat" : "") + '" data-a="rijder" data-i="' + i + '">' +
+          (r.maatje ? '<span class="ster">★</span>' : "") + (r.stil ? '<span class="stil">🔇</span>' : "") +
+          '<div class="ini">' + ini(r.n) + '</div><div class="nm">' + esc(r.n) + "</div>" + golf() + "</div>";
+      });
+      if (st.riders.length < 3) tegels += '<div class="d-tegel leeg">' + t("invite") + "</div>";
+      h += '<div class="sch"><div class="d-kop"><img src="vleugels.png" alt=""><div class="t">' + t("room") + '<br><i>NOVA • ' + st.code + '</i></div>' +
+        '<div class="d-status">' + (st.riders.length ? "● " + t("open") : t("waiting") + " ●") + '</div></div>' +
+        '<div class="d-route">' + t("route") + '</div><div class="d-raster">' + tegels + "</div>" +
+        '<div class="d-mic' + (st.mic ? "" : " uit") + '" data-a="mic"><div class="rond">🎙</div><div><b>' + (st.mic ? t("micOn") : t("micOff")) + "</b><small>" + (st.mic ? t("micSub") : t("micSubOff")) + "</small></div></div>" +
+        '<div class="d-eind" data-a="eind"><div class="vul"></div><span>' + t("end") + '</span></div><div class="d-sub">' + t("hold") + "</div>";
+      if (st.blad !== null) {
+        var r = st.riders[st.blad];
+        h += '<div class="d-blad"><h4>' + esc(r.n) + "</h4>" +
+          '<button class="d-groot g" data-a="dempen">' + (r.stil ? t("unmute") : t("mute")) + "</button>" +
+          '<button class="d-groot o" data-a="maatje"' + (r.maatje || r.vraag ? " disabled" : "") + ">" + (r.maatje ? t("isBuddy") : r.vraag ? t("buddyAsk") : t("buddy")) + "</button>" +
+          '<button class="d-groot g" data-a="terug">' + t("back") + "</button></div>";
+      }
+      h += "</div>";
+    } else if (st.s === "prox") {
+      h += '<div class="sch"><div class="d-kop"><img src="vleugels.png" alt=""><div class="t">PROXIMITY</div><div class="d-status">● 1</div></div>' +
+        '<div class="d-prx-rijder' + '"><div class="ini">' + ini(VREEMDE) + '</div><div style="font-weight:700;font-size:16px">' + VREEMDE + "</div>" + golf(9) + "</div>" +
+        '<button class="d-groot g" data-a="pdempen">' + (st.pstil ? t("unmute") : t("mute")) + "</button>" +
+        '<button class="d-groot o" data-a="verbreek">' + t("disconnect") + "</button>" +
+        '<button class="d-groot r" data-a="blokkeer">' + t("block") + "</button>" +
+        '<div class="d-mic' + (st.mic ? "" : " uit") + '" data-a="mic" style="margin-top:auto"><div class="rond">🎙</div><div><b>' + (st.mic ? t("micOn") : t("micOff")) + "</b><small>" + (st.mic ? t("micSub") : t("micSubOff")) + "</small></div></div></div>";
+    }
+    if (st.toast) h += '<div class="d-toast">' + esc(st.toast) + "</div>";
+    scherm.innerHTML = h;
+    var eind = scherm.querySelector('[data-a="eind"]');
+    if (eind) koppelVasthouden(eind);
+  }
+
+  // praten: willekeurig wie er praat, golfjes bewegen
+  function animeer() {
+    if (!st) return;
+    if (st.s === "rit") {
+      var praters = 0;
+      st.riders.forEach(function (r) { if (Math.random() < 0.12) r.praat = !r.praat && praters < 2; if (r.praat) praters++; });
+      st.ikPraat = Math.random() < 0.15 ? !st.ikPraat : st.ikPraat;
+      scherm.querySelectorAll(".d-tegel").forEach(function (el) { el.classList.toggle("praat", false); });
+      var tegels = scherm.querySelectorAll(".d-tegel:not(.leeg)");
+      tegels.forEach(function (el, i) {
+        var actief = i === 0 ? (st.mic && st.ikPraat) : (st.riders[i - 1] && st.riders[i - 1].praat && !st.riders[i - 1].stil);
+        el.classList.toggle("praat", !!actief);
+        el.querySelectorAll(".golf i").forEach(function (b) { b.style.height = actief ? (3 + Math.random() * 11) + "px" : "3px"; });
+      });
+    } else if (st.s === "prox") {
+      scherm.querySelectorAll(".d-prx-rijder .golf i").forEach(function (b) { b.style.height = st.pstil ? "3px" : (3 + Math.random() * 20) + "px"; });
+    }
+  }
+  setInterval(animeer, 140);
+
+  function koppelVasthouden(el) {
+    var start = 0, raf = 0, vul = el.querySelector(".vul");
+    function stap() { var p = Math.min(1, (Date.now() - start) / 1500); vul.style.width = (p * 100) + "%"; if (p >= 1) { los(); st.s = "home"; st.riders = []; st.blad = null; stopAlles(); toast(t("ended")); } else raf = requestAnimationFrame(stap); }
+    function neer(e) { e.preventDefault(); start = Date.now(); raf = requestAnimationFrame(stap); }
+    function los() { cancelAnimationFrame(raf); if (vul) vul.style.width = "0"; }
+    el.addEventListener("pointerdown", neer); el.addEventListener("pointerup", los); el.addEventListener("pointerleave", los); el.addEventListener("pointercancel", los);
+  }
+
+  scherm.addEventListener("click", function (e) {
+    var el = e.target.closest("[data-a]"); if (!el) return;
+    var a = el.getAttribute("data-a");
+    if (a === "start") {
+      stopAlles(); st.s = "rit"; st.wenk = false; st.riders = []; st.blad = null; st.mic = true; teken();
+      NAMEN.forEach(function (n, i) { later(function () { if (st.s !== "rit") return; st.riders.push({ n: n }); st.toast = n + t("joined"); teken(); later(function () { if (st.toast === n + t("joined")) { st.toast = ""; teken(); } }, 1400); }, 1300 + i * 1500); });
+    } else if (a === "join") { toast(t("joinHint"));
+    } else if (a === "prox") {
+      st.prox = !st.prox; st.wenk = false; teken();
+      if (st.prox) later(function () { if (st.s === "home" && st.prox) { st.s = "prox"; st.pstil = false; teken(); toast(VREEMDE + t("met"), 3000); } }, 2800);
+      else stopAlles();
+    } else if (a === "rijder") { st.blad = +el.getAttribute("data-i"); teken();
+    } else if (a === "terug") { st.blad = null; teken();
+    } else if (a === "dempen") { var r = st.riders[st.blad]; r.stil = !r.stil; var nm = r.n; st.blad = null; if (r.stil) toast(nm + t("muted")); else teken();
+    } else if (a === "maatje") {
+      var rr = st.riders[st.blad]; rr.vraag = true; teken();
+      later(function () { rr.vraag = false; rr.maatje = true; st.blad = null; toast(rr.n + t("buddyYes"), 3000); }, 1600);
+    } else if (a === "mic") { st.mic = !st.mic; teken();
+    } else if (a === "pdempen") { st.pstil = !st.pstil; teken();
+    } else if (a === "verbreek" || a === "blokkeer") {
+      stopAlles(); st.s = "home"; teken(); toast(a === "blokkeer" ? VREEMDE + t("blocked") : t("gone"), 3000);
+    }
+  });
+
+  document.getElementById("demo-opnieuw").addEventListener("click", reset);
+  new MutationObserver(function () { teken(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-taal"] });
+  reset();
+})();
+</script>
+</body>
+</html>
